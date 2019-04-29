@@ -1,40 +1,28 @@
-{{- if .Values.ingress.enabled -}}
-{{- $fullName := include "mychart.fullname" . -}}
-{{- $ingressPaths := .Values.ingress.paths -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
-  labels:
-    app.kubernetes.io/name: {{ include "mychart.name" . }}
-    helm.sh/chart: {{ include "mychart.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-  {{- with .Values.ingress.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+  name: kube-ts-ingress
+  annotations:  
+    kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
 spec:
-{{- if .Values.ingress.tls }}
   tls:
-  {{- range .Values.ingress.tls }}
-    - hosts:
-      {{- range .hosts }}
-        - {{ . | quote }}
-      {{- end }}
-      secretName: {{ .secretName }}
-  {{- end }}
-{{- end }}
+  - hosts:
+    - {{ .Values.ingress.hosts.client }}
+    - {{ .Values.ingress.hosts.api }}
+    secretName: letsencrypt-prod
   rules:
-  {{- range .Values.ingress.hosts }}
-    - host: {{ . | quote }}
-      http:
-        paths:
-	{{- range $ingressPaths }}
-          - path: {{ . }}
-            backend:
-              serviceName: {{ $fullName }}
-              servicePort: http
-	{{- end }}
-  {{- end }}
-{{- end }}
+  - host: {{ .Values.ingress.hosts.client }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Values.services.client }}
+          servicePort: 80
+  - host: {{ .Values.ingress.hosts.api }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Values.services.api }}
+          servicePort: 80
+
+          
