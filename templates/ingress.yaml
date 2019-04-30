@@ -8,21 +8,14 @@ metadata:
 spec:
   tls:
   - hosts:
-    - {{ .Values.ingress.hosts.client }}
-    - {{ .Values.ingress.hosts.api }}
+    - api.mariuszrajczakowski.me
     secretName: letsencrypt-prod
   rules:
-  - host: {{ .Values.ingress.hosts.client }}
+  - host: api.mariuszrajczakowski.me
     http:
       paths:
       - backend:
-          serviceName: {{ .Values.services.client }}
-          servicePort: 80
-  - host: {{ .Values.ingress.hosts.api }}
-    http:
-      paths:
-      - backend:
-          serviceName: {{ .Values.services.api }}
+          serviceName: kube-ts-server
           servicePort: 80
 
           
