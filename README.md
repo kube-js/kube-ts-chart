@@ -97,17 +97,20 @@ helm install --name cert-manager --namespace kube-system stable/cert-manager --v
 helm plugin install --version master https://github.com/sagansystems/helm-github.git
 ```
 
-#### 2. Install the chart
+#### 2. Clone the chart and cd into it
+```
+git clone git@github.com:kube-js/kube-ts-chart.git
+
+cd kube-ts-chart
+```
+
+#### 3. Install the chart
 ```
 helm install --name my-release .
 ```
 
-#### 2. Uninstall the chart
+#### 4. Uninstall the chart
 ```
 helm delete --purge my-release
 ```
 
-
-```
-helm github install --repo git@github.com:kube-js/kube-ts-chart.git
-```

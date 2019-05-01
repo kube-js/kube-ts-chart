@@ -8,8 +8,8 @@ metadata:
 spec:
   tls:
   - hosts:
-    - api.mariuszrajczakowski.me
-    - client.mariuszrajczakowski.me
+    - {{ .Values.ingress.api.host }}
+    - {{ .Values.ingress.client.host }}
     secretName: letsencrypt-prod
   rules:
   - host: {{ .Values.ingress.api.host }}
