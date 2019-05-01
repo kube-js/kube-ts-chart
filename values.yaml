@@ -1,11 +1,18 @@
 certmanager:
   email: mariuszrajczakowski@gmail.com
 
-ingress:
-  hosts:
-    api: api.mariuszrajczakowski.me
-    client: client.mariuszrajczakowski.me
+cluster_issuer:
+  name: letsencrypt-prod
+  server: https://acme-v02.api.letsencrypt.org/directory
 
-services:
-  api: kube-ts-server
-  client: kube-ts-client
+ingress:
+  name: kube-ts-ingress
+  api:
+    host: api.mariuszrajczakowski.me
+    serviceName: kube-ts-server
+    servicePort: 80
+  client:
+    host: client.mariuszrajczakowski.me
+    serviceName: kube-ts-client
+    servicePort: 80
+
