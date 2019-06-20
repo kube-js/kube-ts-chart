@@ -22,6 +22,16 @@ kubectl -n kube-system create serviceaccount tiller
 kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 ```
 
+```
+https://github.com/helm/helm/issues/3460
+kubectl delete svc tiller-deploy -n kube-system
+kubectl -n kube-system delete deploy tiller-deploy
+kubectl create serviceaccount --namespace kube-system tiller
+kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+helm init --service-account tiller
+helm ls # does not return an error
+```
+
 #### 3. Now we can run helm init, which installs Tiller on our cluster, along with some local housekeeping tasks such as downloading the stable repo details:
 ```
 helm init --service-account tiller
@@ -42,17 +52,16 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 ```
 
 #### 2. Create ingress-nginx service using on of the following:
+- paid option on digital ocean using a LoadBalancer (\$10/months):
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml
+```
 
 - free option using NodePort:
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/baremetal/service-nodeport.yaml
-```
-
-- paid option on digital ocean using a LoadBalancer (\$10/months):
-
-```
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml
 ```
 
 #### 3. Verify that either NodePort or LoadBalancer service has been successfuly create:
@@ -88,29 +97,24 @@ kubectl label namespace kube-system certmanager.k8s.io/disable-validation="true"
 helm install --name cert-manager --namespace kube-system stable/cert-manager --version v0.6.6
 ```
 
-
 ### Install kube-ts-chart
 
-#### 1. Install [helm-github](https://github.com/sagansystems/helm-github) to allow install this chart (kube-ts-chart) directly from github:
-
-```
-helm plugin install --version master https://github.com/sagansystems/helm-github.git
-```
-
-#### 2. Clone the chart and cd into it
+#### 1. Clone the chart and cd into it
 ```
 git clone git@github.com:kube-js/kube-ts-chart.git
 
 cd kube-ts-chart
 ```
 
-#### 3. Install the chart
+#### 2. Install the chart
 ```
-helm install --name my-release .
+helm install --name my-release . 
 ```
 
 #### 4. Uninstall the chart
 ```
 helm delete --purge my-release
 ```
+ -->
 
+https://docs.cert-manager.io/en/latest/reference/issuers.html

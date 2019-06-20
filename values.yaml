@@ -5,14 +5,3 @@ cluster_issuer:
   name: letsencrypt-prod
   server: https://acme-v02.api.letsencrypt.org/directory
 
-ingress:
-  name: kube-ts-ingress
-  api:
-    host: api.mariuszrajczakowski.me
-    serviceName: kube-ts-server
-    servicePort: 80
-  client:
-    host: client.mariuszrajczakowski.me
-    serviceName: kube-ts-client
-    servicePort: 80
-

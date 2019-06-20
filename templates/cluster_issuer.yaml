@@ -5,11 +5,11 @@ metadata:
 spec:
   acme:
     # The ACME server URL
-    server: {{ .Values.ingress.name }}
+    server: {{ .Values.cluster_issuer.server }}
     # Email address used for ACME registration
     email: {{ .Values.certmanager.email }}
     # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
-      name: {{ .Values.ingress.name }}
+      name: {{ .Values.cluster_issuer.name }}
     # Enable the HTTP-01 challenge provider
     http01: {}
